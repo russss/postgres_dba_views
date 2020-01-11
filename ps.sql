@@ -9,7 +9,7 @@ CREATE OR REPLACE VIEW ps AS
     ELSE
       pg_stat_activity.state
    END,
-   pg_stat_activity.waiting
+   pg_stat_activity.wait_event_type
    FROM pg_stat_activity
   WHERE pg_stat_activity.state <> 'idle'::text
   ORDER BY now() - pg_stat_activity.xact_start DESC;
