@@ -2,7 +2,9 @@
 
 CREATE OR REPLACE VIEW disk_usage AS
  SELECT pg_tablespace.spcname AS tablespace, pg_namespace.nspname AS schema, pg_class.relname AS relation,
-    pg_total_relation_size(pg_class.oid::regclass) AS size,
+    pg_size_pretty(pg_table_size(pg_class.oid::regclass)) AS table_size,
+    pg_size_pretty(pg_indexes_size(pg_class.oid::regclass)) AS index_size,
+    pg_size_pretty(pg_total_relation_size(pg_class.oid::regclass)) AS total_size,
     COALESCE(pg_stat_user_tables.seq_scan + pg_stat_user_tables.idx_scan, 0) AS scans
    FROM pg_class
    LEFT JOIN pg_stat_user_tables ON pg_stat_user_tables.relid = pg_class.oid
